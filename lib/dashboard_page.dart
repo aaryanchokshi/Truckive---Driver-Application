@@ -171,6 +171,13 @@ class _DashboardPageState extends State<DashboardPage> {
     _timer = Timer.periodic(duration, (Timer timer) async {
       Position position = await Geolocator.getCurrentPosition();
       _updateLocationInFirebase(position);
+
+      // Update the map's center to the new location
+      setState(() {
+        _currentLocation = LatLng(position.latitude, position.longitude);
+      });
+      _mapController.move(
+          _currentLocation, 15); // You may adjust the zoom level if needed
     });
   }
 
