@@ -167,7 +167,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _startLocationUpdateTimer() {
-    const duration = Duration(minutes: 5);
+    const duration = Duration(seconds: 5);
     _timer = Timer.periodic(duration, (Timer timer) async {
       Position position = await Geolocator.getCurrentPosition();
       _updateLocationInFirebase(position);
