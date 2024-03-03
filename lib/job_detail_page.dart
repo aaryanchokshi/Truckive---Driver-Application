@@ -1,27 +1,6 @@
+// TODO Implement this library.
 import 'package:flutter/material.dart';
-
-// Assuming JobNotification is defined in the same file as NotificationsPage or elsewhere
-// If not, include the JobNotification class definition here as well
-// Define the JobNotification model if it's not already defined
-class JobNotification {
-  final String title;
-  final String description;
-  final String date;
-
-  JobNotification({
-    required this.title,
-    required this.description,
-    required this.date,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'title': title,
-      'description': description,
-      'date': date,
-    };
-  }
-}
+import 'job_notification.dart'; // Import JobNotification model
 
 class JobDetailPage extends StatelessWidget {
   final JobNotification notification;
@@ -33,7 +12,6 @@ class JobDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Job Details'),
-        backgroundColor: Color(0xFF0d2136), // Updated color
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

@@ -205,6 +205,16 @@ class _DashboardPageState extends State<DashboardPage> {
         title:
             Text('Truckive Dashboard', style: TextStyle(color: Colors.white)),
         backgroundColor: Color(0xFF0d2136),
+        iconTheme: IconThemeData(color: Colors.white), // Updated AppBar color
+        actions: [
+          IconButton(
+            color: Colors.white,
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.pushNamed(context, '/notification');
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -303,21 +313,31 @@ Widget _buildBottomAppBar(BuildContext context) {
 }
 
 Widget _buildDrawer(BuildContext context) {
+  // Access the current user
+  final user = FirebaseAuth.instance.currentUser;
+
+  // Use the user's display name and email, with fallbacks in case they're null
+  final String driverEmail = user?.email ?? 'driver@example.com';
+
   return Drawer(
     child: ListView(
       children: <Widget>[
         UserAccountsDrawerHeader(
-          accountName: Text('Driver Name'),
-          accountEmail: Text('driver@example.com'),
+          // Since you're not displaying the driver's name, you might want to use a static text like "Driver Account" or similar
+          accountName: Text(
+              'Driver Account'), // Static text or you can remove this if you don't want a name displayed
+          accountEmail: Text(driverEmail), // Display the driver's email
           currentAccountPicture: CircleAvatar(
             backgroundColor: Colors.white,
             child: Text(
-              'D',
+              driverEmail.isNotEmpty
+                  ? driverEmail[0].toUpperCase()
+                  : 'D', // Use the first letter of the email, or 'D' as a fallback
               style: TextStyle(fontSize: 40.0),
             ),
           ),
           decoration: BoxDecoration(
-            color: Color(0xFF0d2136), // Updated Drawer header color
+            color: Color(0xFF0d2136), // Drawer header color
           ),
         ),
         ListTile(

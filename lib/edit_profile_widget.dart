@@ -104,8 +104,10 @@
 //     );
 //   }
 // }
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class EditProfileWidget extends StatefulWidget {
   const EditProfileWidget({Key? key}) : super(key: key);
@@ -123,10 +125,34 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   @override
   void initState() {
     super.initState();
-    // Mock Data for demonstration
     _nameController.text = 'John Doe';
     _emailController.text = 'john.doe@example.com';
     _bioController.text = 'Truck driver with 5 years of experience.';
+  }
+
+  Future<void> _saveProfileChanges() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DatabaseReference dbRef =
+          FirebaseDatabase.instance.ref('userProfiles/${user.uid}');
+      await dbRef.set({
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'bio': _bioController.text,
+      }).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Profile updated successfully!'),
+        ));
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error updating profile: $error'),
+        ));
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('No user logged in.'),
+      ));
+    }
   }
 
   @override
@@ -134,13 +160,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white, // Updated to dark blue color
+        backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
+          icon: Icon(Icons.arrow_back_rounded, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Edit Profile'),
+        title: Text('Edit Profile', style: TextStyle(color: Colors.black)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -161,10 +187,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 onPressed: () {
                   // Function to change photo
                 },
-                child: Text('Change Photo',
-                    style: TextStyle(
-                        color: Colors
-                            .blue)), // Consider changing this color too if needed
+                child:
+                    Text('Change Photo', style: TextStyle(color: Colors.blue)),
               ),
               SizedBox(height: 24),
               TextFormField(
@@ -193,12 +217,11 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               ),
               SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
-                  // Function to save changes
-                },
+                onPressed: _saveProfileChanges,
                 child: Text('Save Changes'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white, // Updated to dark blue color
+                  primary: Colors
+                      .white, // You might want to change the color to match your theme
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),

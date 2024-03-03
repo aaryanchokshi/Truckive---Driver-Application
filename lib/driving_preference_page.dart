@@ -30,9 +30,9 @@ class _DrivingPreferencesPageState extends State<DrivingPreferencesPage> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: SwitchListTile(
-                title:
-                    Text('Allow Pets', style: TextStyle(color: Colors.white)),
-                secondary: Icon(Icons.pets, color: Colors.white),
+                title: Text('Allow Refreshment Break',
+                    style: TextStyle(color: Colors.white)),
+                secondary: Icon(Icons.local_cafe, color: Colors.white),
                 value: allowPets,
                 onChanged: (bool value) {
                   setState(() {
